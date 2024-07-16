@@ -108,7 +108,7 @@ func createUser() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, uuid.NewString())
+		c.JSON(http.StatusOK, stringP(uuid.NewString()))
 	}
 }
 
