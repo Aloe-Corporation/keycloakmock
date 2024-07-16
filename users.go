@@ -108,7 +108,9 @@ func createUser() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, stringP(uuid.NewString()))
+		c.Writer.Header().Add("Location", "/"+uuid.NewString())
+
+		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -118,7 +120,6 @@ func getUserGroups(conf Config) gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, "")
 			return
 		}
-
 		c.JSON(http.StatusOK, conf.Groups)
 	}
 }
