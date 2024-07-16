@@ -2,6 +2,7 @@ package keycloakmock
 
 import (
 	"net/http"
+	"slices"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,5 +23,32 @@ func getRealmRoles(conf Config) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, &roles)
+	}
+}
+
+func addRealmRoleToUser(conf Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.GetHeader("Authorization") == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		role := new(Role)
+		if err := c.ShouldBindJSON(role); err != nil {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		if !slices.ContainsFunc(conf.Roles, func(roleConf RolesConfig) bool {
+			if roleConf.ID.String() == *role.ID && roleConf.Name == *role.Name {
+				return true
+			}
+			return false
+		}) {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		c.JSON(http.StatusOK, "")
 	}
 }

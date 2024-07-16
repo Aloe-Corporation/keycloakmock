@@ -54,6 +54,7 @@ func launch(c Config) *httptest.Server {
 		PUT("", updateUser(c)).
 		DELETE("", deleteUser(c)).
 		GET("/role-mappings/realm", getRealmRoles(c)).
+		POST("/role-mappings/realm", addRealmRoleToUser(c)).
 		GET("/groups", getUserGroups(c))
 
 	server := httptest.NewServer(router)
