@@ -1,7 +1,6 @@
 package keycloakmock
 
 import (
-	"fmt"
 	"net/http/httptest"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +23,7 @@ func LauchDefault() (*httptest.Server, Config) {
 
 func launch(c Config) *httptest.Server {
 	router := gin.New()
-	router.POST(fmt.Sprintf("/realms/%s/protocol/openid-connect/token", c.Realm), loginClient(c))
+	router.POST("/realms/:realm/protocol/openid-connect/token", loginClient(c))
 
 	router.Group("/admin/realms/:realm/users/:id").
 		GET("", getUserByID(c)).
