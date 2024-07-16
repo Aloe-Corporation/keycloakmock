@@ -16,11 +16,23 @@ func LauchDefault() (*httptest.Server, Config) {
 		Realm:    "test",
 		UserUUID: uuid.New(),
 		ClientId: "client",
-		Roles: []string{
-			"default",
-			"administrator",
-			"manager",
-			"operator",
+		Roles: []RolesConfig{
+			{
+				Name: "default",
+				ID:   uuid.New(),
+			},
+			{
+				Name: "administrator",
+				ID:   uuid.New(),
+			},
+			{
+				Name: "manager",
+				ID:   uuid.New(),
+			},
+			{
+				Name: "operator",
+				ID:   uuid.New(),
+			},
 		},
 		Groups: []string{
 			"test",

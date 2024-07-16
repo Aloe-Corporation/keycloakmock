@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func getRealmRoles(conf Config) gin.HandlerFunc {
@@ -17,8 +16,8 @@ func getRealmRoles(conf Config) gin.HandlerFunc {
 		var roles []Role
 		for _, role := range conf.Roles {
 			roles = append(roles, Role{
-				ID:   stringP(uuid.NewString()),
-				Name: stringP(role),
+				ID:   stringP(role.ID.String()),
+				Name: stringP(role.Name),
 			})
 		}
 
