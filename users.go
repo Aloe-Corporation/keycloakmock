@@ -120,6 +120,14 @@ func getUserGroups(conf Config) gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, "")
 			return
 		}
-		c.JSON(http.StatusOK, conf.Groups)
+
+		var groups []Group
+		for _, group := range conf.Groups {
+			groups = append(groups, Group{
+				Name: &group,
+			})
+		}
+
+		c.JSON(http.StatusOK, &groups)
 	}
 }
