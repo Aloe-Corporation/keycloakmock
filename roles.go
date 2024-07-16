@@ -35,7 +35,7 @@ func addRealmRoleToUser(conf Config) gin.HandlerFunc {
 
 		role := new(Role)
 		if err := c.ShouldBindJSON(role); err != nil {
-			c.JSON(http.StatusBadRequest, "")
+			c.JSON(http.StatusBadRequest, "can't unmarshal role")
 			return
 		}
 
@@ -45,7 +45,7 @@ func addRealmRoleToUser(conf Config) gin.HandlerFunc {
 			}
 			return false
 		}) {
-			c.JSON(http.StatusBadRequest, "")
+			c.JSON(http.StatusBadRequest, "unknown role")
 			return
 		}
 

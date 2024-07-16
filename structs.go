@@ -96,3 +96,9 @@ type Group struct {
 	ClientRoles *map[string][]string `json:"clientRoles,omitempty"`
 	RealmRoles  *[]string            `json:"realmRoles,omitempty"`
 }
+
+type HTTPErrorResponse struct {
+	Error       string `json:"error,omitempty"`
+	Message     string `json:"errorMessage,omitempty"`
+	Description string `json:"error_description,omitempty"`
+}
