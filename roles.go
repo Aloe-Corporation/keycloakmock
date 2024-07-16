@@ -2,6 +2,7 @@ package keycloakmock
 
 import (
 	"net/http"
+	"slices"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,21 +33,23 @@ func addRealmRoleToUser(conf Config) gin.HandlerFunc {
 			return
 		}
 
-		role := new(Role)
-		if err := c.ShouldBindJSON(role); err != nil {
-			c.JSON(http.StatusBadGateway, "can't unmarshal role")
+		roles := []Role{}
+		if err := c.ShouldBindJSON(roles); err != nil {
+			c.JSON(http.StatusBadRequest, "can't unmarshal role")
 			return
 		}
 
-		// if !slices.ContainsFunc(conf.Roles, func(roleConf RolesConfig) bool {
-		// 	if roleConf.ID.String() == *role.ID && roleConf.Name == *role.Name {
-		// 		return true
-		// 	}
-		// 	return false
-		// }) {
-		// 	c.JSON(http.StatusBadRequest, "unknown role")
-		// 	return
-		// }
+		for _, role := range roles {
+			if !slices.ContainsFunc(conf.Roles, func(roleConf RolesConfig) bool {
+				if roleConf.ID.String() == *role.ID && roleConf.Name == *role.Name {
+					return true
+				}
+				return false
+			}) {
+				c.JSON(http.StatusBadRequest, "unknown role")
+				return
+			}
+		}
 
 		c.JSON(http.StatusOK, "")
 	}
