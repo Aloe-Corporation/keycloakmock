@@ -103,11 +103,6 @@ func createUser() gin.HandlerFunc {
 			return
 		}
 
-		if len(*user.Credentials) == 0 {
-			c.JSON(http.StatusBadRequest, "")
-			return
-		}
-
 		c.Writer.Header().Add("Location", "/"+uuid.NewString())
 
 		c.JSON(http.StatusOK, "")
