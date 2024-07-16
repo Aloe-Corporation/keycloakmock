@@ -1,6 +1,7 @@
 package keycloakmock
 
 import (
+	"fmt"
 	"net/http"
 	"slices"
 
@@ -38,6 +39,8 @@ func addRealmRoleToUser(conf Config) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "can't unmarshal role")
 			return
 		}
+		fmt.Println(roles)
+		fmt.Println(conf.Roles)
 
 		for _, role := range roles {
 			if !slices.ContainsFunc(conf.Roles, func(roleConf RolesConfig) bool {
