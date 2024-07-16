@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func getUserByID(conf Config) gin.HandlerFunc {
@@ -81,5 +82,45 @@ func deleteUser(conf Config) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, "")
+	}
+}
+
+func createUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.GetHeader("Authorization") == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		user := new(User)
+		if err := c.ShouldBindJSON(user); err != nil {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		if *user.Email == "" {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		if len(*user.Credentials) == 0 {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		user.ID = stringP(uuid.NewString())
+
+		c.JSON(http.StatusOK, user)
+	}
+}
+
+func getUserGroups(conf Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.GetHeader("Authorization") == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		c.JSON(http.StatusOK, conf.Groups)
 	}
 }

@@ -66,3 +66,33 @@ type MultiValuedHashMap struct {
 	LoadFactor *float32 `json:"loadFactor,omitempty"`
 	Threshold  *int32   `json:"threshold,omitempty"`
 }
+
+// CompositesRepresentation represents the composite roles of a role
+type CompositesRepresentation struct {
+	Client *map[string][]string `json:"client,omitempty"`
+	Realm  *[]string            `json:"realm,omitempty"`
+}
+
+// Role is a role
+type Role struct {
+	ID                 *string                   `json:"id,omitempty"`
+	Name               *string                   `json:"name,omitempty"`
+	ScopeParamRequired *bool                     `json:"scopeParamRequired,omitempty"`
+	Composite          *bool                     `json:"composite,omitempty"`
+	Composites         *CompositesRepresentation `json:"composites,omitempty"`
+	ClientRole         *bool                     `json:"clientRole,omitempty"`
+	ContainerID        *string                   `json:"containerId,omitempty"`
+	Description        *string                   `json:"description,omitempty"`
+	Attributes         *map[string][]string      `json:"attributes,omitempty"`
+}
+
+type Group struct {
+	ID          *string              `json:"id,omitempty"`
+	Name        *string              `json:"name,omitempty"`
+	Path        *string              `json:"path,omitempty"`
+	SubGroups   *[]Group             `json:"subGroups,omitempty"`
+	Attributes  *map[string][]string `json:"attributes,omitempty"`
+	Access      *map[string]bool     `json:"access,omitempty"`
+	ClientRoles *map[string][]string `json:"clientRoles,omitempty"`
+	RealmRoles  *[]string            `json:"realmRoles,omitempty"`
+}

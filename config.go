@@ -6,4 +6,6 @@ type Config struct {
 	Realm    string
 	UserUUID uuid.UUID
 	ClientId string
+	Roles    []string
+	Groups   []string
 }

@@ -16,6 +16,17 @@ func LauchDefault() (*httptest.Server, Config) {
 		Realm:    "test",
 		UserUUID: uuid.New(),
 		ClientId: "client",
+		Roles: []string{
+			"default",
+			"administrator",
+			"manager",
+			"operator",
+		},
+		Groups: []string{
+			"test",
+			"tenant/test",
+			"tenant/test/subgroup",
+		},
 	}
 
 	return launch(c), c
@@ -25,10 +36,13 @@ func launch(c Config) *httptest.Server {
 	router := gin.New()
 	router.POST("/realms/:realm/protocol/openid-connect/token", loginClient(c))
 
+	router.POST("/admin/realms/:realm/users", createUser())
 	router.Group("/admin/realms/:realm/users/:id").
 		GET("", getUserByID(c)).
 		PUT("", updateUser(c)).
-		DELETE("", deleteUser(c))
+		DELETE("", deleteUser(c)).
+		GET("/role-mappings/realm", getRealmRoles(c)).
+		GET("/groups", getUserGroups(c))
 
 	server := httptest.NewServer(router)
 	return server
