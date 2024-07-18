@@ -26,6 +26,35 @@ func getRealmRoles(conf Config) gin.HandlerFunc {
 	}
 }
 
+func getRealmRoleById(conf Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.GetHeader("Authorization") == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		roleID := c.Param("role_id")
+		if roleID == "" {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		roleIndex := slices.IndexFunc(conf.Roles, func(role RolesConfig) bool {
+			return role.UUID.String() == roleID
+		})
+
+		if roleIndex == -1 {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		c.JSON(http.StatusOK, &Role{
+			ID:   stringP(conf.Roles[roleIndex].UUID.String()),
+			Name: stringP(conf.Roles[roleIndex].Name),
+		})
+	}
+}
+
 func getRealmRolesByUserID(conf Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.GetHeader("Authorization") == "" {
