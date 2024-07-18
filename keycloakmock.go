@@ -47,7 +47,7 @@ func LauchDefault() (*httptest.Server, Config) {
 
 func launch(c Config) *httptest.Server {
 	router := gin.New()
-	router.Use(realmCheckMiddleware())
+	router.Use(realmCheckMiddleware(c))
 
 	router.POST("/realms/:realm/protocol/openid-connect/token", loginClient(c))
 	router.POST("/admin/realms/:realm/users", createUser())
