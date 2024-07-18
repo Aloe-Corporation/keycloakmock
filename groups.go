@@ -19,8 +19,11 @@ func getGroups(conf Config) gin.HandlerFunc {
 		}
 
 		match := findGroupByName(conf.Groups, searchGroupName)
+		if match != nil {
+			c.JSON(http.StatusOK, flattenGroupConfig([]GroupConfig{*match}))
+		}
 
-		c.JSON(http.StatusNoContent, []GroupConfig{*match})
+		c.JSON(http.StatusNoContent, "")
 	}
 }
 
