@@ -1,6 +1,7 @@
 package keycloakmock
 
 import (
+	"net/http"
 	"net/http/httptest"
 
 	"github.com/gin-gonic/gin"
@@ -46,8 +47,9 @@ func LauchDefault() (*httptest.Server, Config) {
 
 func launch(c Config) *httptest.Server {
 	router := gin.New()
-	router.POST("/realms/:realm/protocol/openid-connect/token", loginClient(c))
+	router.Use(realmCheckMiddleware())
 
+	router.POST("/realms/:realm/protocol/openid-connect/token", loginClient(c))
 	router.POST("/admin/realms/:realm/users", createUser())
 	router.Group("/admin/realms/:realm/users/:id").
 		GET("", getUserByID(c)).
@@ -67,6 +69,22 @@ func launch(c Config) *httptest.Server {
 
 	server := httptest.NewServer(router)
 	return server
+}
+
+func realmCheckMiddleware(conf Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		realm := c.Param("realm")
+		if realm == "" {
+			c.AbortWithStatusJSON(http.StatusBadRequest, "")
+			return
+		}
+
+		if realm != conf.Realm {
+			c.AbortWithStatusJSON(http.StatusBadRequest, "")
+			return
+		}
+		c.Next()
+	}
 }
 
 func stringP(str string) *string {
