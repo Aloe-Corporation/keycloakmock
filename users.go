@@ -116,13 +116,6 @@ func getUserGroups(conf Config) gin.HandlerFunc {
 			return
 		}
 
-		var groups []Group
-		for _, group := range conf.Groups {
-			groups = append(groups, Group{
-				Name: &group,
-			})
-		}
-
-		c.JSON(http.StatusOK, &groups)
+		c.JSON(http.StatusOK, flattenGroupConfig(conf.Groups))
 	}
 }

@@ -2,10 +2,8 @@ package keycloakmock
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func getGroups(conf Config) gin.HandlerFunc {
@@ -15,28 +13,18 @@ func getGroups(conf Config) gin.HandlerFunc {
 			return
 		}
 
-		var groups []Group
-
-		for _, groupName := range conf.Groups {
-			parts := strings.Split(groupName, "/")
-			group := Group{
-				ID:        stringP(uuid.New().String()),
-				Name:      &parts[0],
-				SubGroups: &[]Group{},
-			}
-
-			for i := 1; i < len(parts); i++ {
-				subGroup := Group{
-					ID:   stringP(uuid.New().String()),
-					Name: &parts[i],
-				}
-
-				*group.SubGroups = append(*group.SubGroups, subGroup)
-			}
-
-			groups = append(groups, group)
-		}
-
-		c.JSON(http.StatusOK, &groups)
+		c.JSON(http.StatusOK, flattenGroupConfig(conf.Groups))
 	}
+}
+
+func flattenGroupConfig(groups []GroupConfig) []Group {
+	var result []Group
+	for _, group := range groups {
+		result = append(result, Group{
+			ID:   stringP(group.UUID.String()),
+			Name: stringP(group.Name),
+		})
+		result = append(result, flattenGroupConfig(group.SubGroup)...)
+	}
+	return result
 }

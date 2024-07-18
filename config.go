@@ -7,10 +7,16 @@ type Config struct {
 	UserUUID uuid.UUID
 	ClientId string
 	Roles    []RolesConfig
-	Groups   []string
+	Groups   []GroupConfig
 }
 
 type RolesConfig struct {
 	UUID uuid.UUID
 	Name string
+}
+
+type GroupConfig struct {
+	UUID     uuid.UUID
+	Name     string
+	SubGroup []GroupConfig
 }
