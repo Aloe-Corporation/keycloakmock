@@ -5,7 +5,6 @@ import (
 	"slices"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func getRealmRoles(conf Config) gin.HandlerFunc {
@@ -71,10 +70,7 @@ func addRealmRoleToUser(conf Config) gin.HandlerFunc {
 		}
 
 		for _, role := range roles {
-			if !slices.ContainsFunc(conf.Roles, func(roleConf struct {
-				UUID uuid.UUID
-				Name string
-			}) bool {
+			if !slices.ContainsFunc(conf.Roles, func(roleConf RolesConfig) bool {
 				if roleConf.UUID.String() == *role.ID && roleConf.Name == *role.Name {
 					return true
 				}
@@ -103,10 +99,7 @@ func deleteRealmRoleFromUser(conf Config) gin.HandlerFunc {
 		}
 
 		for _, role := range roles {
-			if !slices.ContainsFunc(conf.Roles, func(roleConf struct {
-				UUID uuid.UUID
-				Name string
-			}) bool {
+			if !slices.ContainsFunc(conf.Roles, func(roleConf RolesConfig) bool {
 				if roleConf.UUID.String() == *role.ID && roleConf.Name == *role.Name {
 					return true
 				}
