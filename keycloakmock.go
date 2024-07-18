@@ -38,11 +38,11 @@ func LauchDefault() (*httptest.Server, Config) {
 		Groups: []GroupConfig{
 			{
 				UUID: uuid.New(),
-				Name: "test",
+				Name: "tenant",
 				SubGroup: []GroupConfig{
 					{
 						UUID: uuid.New(),
-						Name: "test/tenant",
+						Name: "test",
 					},
 				},
 			},
