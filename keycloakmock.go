@@ -16,22 +16,25 @@ func LauchDefault() (*httptest.Server, Config) {
 		Realm:    "test",
 		UserUUID: uuid.New(),
 		ClientId: "client",
-		Roles: []RolesConfig{
+		Roles: []struct {
+			UUID uuid.UUID
+			Name string
+		}{
 			{
 				Name: "default",
-				ID:   uuid.New(),
+				UUID: uuid.New(),
 			},
 			{
 				Name: "administrator",
-				ID:   uuid.New(),
+				UUID: uuid.New(),
 			},
 			{
 				Name: "manager",
-				ID:   uuid.New(),
+				UUID: uuid.New(),
 			},
 			{
 				Name: "operator",
-				ID:   uuid.New(),
+				UUID: uuid.New(),
 			},
 		},
 		Groups: []string{
@@ -58,7 +61,8 @@ func launch(c Config) *httptest.Server {
 		DELETE("/role-mappings/realm", deleteRealmRoleFromUser(c)).
 		GET("/groups", getUserGroups(c))
 
-	router.GET("/admin/realms/:realm/roles", getRealmRoles(c))
+	router.Group("/admin/realms/:realm/roles").
+		GET("", getRealmRoles(c))
 
 	server := httptest.NewServer(router)
 	return server
