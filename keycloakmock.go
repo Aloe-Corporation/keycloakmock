@@ -74,7 +74,7 @@ func launch(c Config) *httptest.Server {
 	router.Group("/admin/realms/:realm/roles-by-id/:role_id").
 		GET("", getRealmRoleById(c))
 
-	router.Group("/:realm/groups").
+	router.Group("/admin/realms/:realm/groups").
 		GET("", getGroups(c))
 
 	server := httptest.NewServer(router)
