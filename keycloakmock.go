@@ -79,7 +79,7 @@ func realmCheckMiddleware(conf Config) gin.HandlerFunc {
 			return
 		}
 
-		if realm != conf.Realm {
+		if realm != conf.Realm || realm != "master" {
 			c.AbortWithStatusJSON(http.StatusBadRequest, "")
 			return
 		}
