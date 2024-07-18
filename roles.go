@@ -69,7 +69,7 @@ func getRealmRoleByName(conf Config) gin.HandlerFunc {
 		}
 
 		roleIndex := slices.IndexFunc(conf.Roles, func(role RolesConfig) bool {
-			return role.UUID.String() == roleName
+			return role.Name == roleName
 		})
 
 		if roleIndex == -1 {
