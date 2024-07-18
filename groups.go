@@ -18,19 +18,16 @@ func getGroups(conf Config) gin.HandlerFunc {
 			return
 		}
 
-		match := findGroupByName(conf.Groups, searchGroupName)
-		if match != nil {
-			c.JSON(http.StatusOK, flattenGroupConfig([]GroupConfig{*match}))
-		}
+		groups := findGroupsByName(conf.Groups, searchGroupName)
 
-		c.JSON(http.StatusNoContent, "")
+		c.JSON(http.StatusNoContent, flattenGroupConfig(groups))
 	}
 }
 
 func flattenGroupConfig(groups []GroupConfig) []Group {
 	var result []Group
 	for _, group := range groups {
-		subGroups := flattenGroupConfig(group.SubGroup)
+		subGroups := flattenGroupConfig(group.SubGroups)
 		result = append(result, Group{
 			ID:        stringP(group.UUID.String()),
 			Name:      stringP(group.Name),
@@ -41,14 +38,29 @@ func flattenGroupConfig(groups []GroupConfig) []Group {
 	return result
 }
 
-func findGroupByName(groups []GroupConfig, name string) *GroupConfig {
+func findGroupsByName(groups []GroupConfig, name string) []GroupConfig {
+	var results []GroupConfig
 	for _, group := range groups {
-		if group.Name == name {
-			return &group
-		}
-		if found := findGroupByName(group.SubGroup, name); found != nil {
-			return found
+		if groupContainsName(group, name) {
+			results = append(results, group)
 		}
 	}
-	return nil
+
+	return results
+}
+
+func groupContainsName(group GroupConfig, name string) bool {
+	if group.Name == name {
+		return true
+	}
+
+	if group.SubGroups == nil {
+		return false
+	}
+
+	for _, g := range group.SubGroups {
+		return groupContainsName(g, name)
+	}
+
+	return false
 }

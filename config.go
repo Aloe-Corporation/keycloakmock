@@ -16,7 +16,7 @@ type RolesConfig struct {
 }
 
 type GroupConfig struct {
-	UUID     uuid.UUID
-	Name     string
-	SubGroup []GroupConfig
+	UUID      uuid.UUID
+	Name      string
+	SubGroups []GroupConfig
 }
