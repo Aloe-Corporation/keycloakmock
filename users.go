@@ -119,3 +119,37 @@ func getUserGroups(conf Config) gin.HandlerFunc {
 		c.JSON(http.StatusOK, flattenGroupConfig(conf.Groups))
 	}
 }
+
+func AddUserToGroup(conf Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.GetHeader("Authorization") == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		id := c.Param("id")
+		if id == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		if id != conf.UserUUID.String() {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		groupID := c.Param("group_id")
+		if groupID == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		groups := findGroups(conf.Groups, groupContainsId, groupID)
+		if len(groups) == 0 {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
+		c.JSON(http.StatusNoContent, "")
+	}
+}

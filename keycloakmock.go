@@ -65,7 +65,8 @@ func launch(c Config) *httptest.Server {
 		GET("/role-mappings/realm", getRealmRolesByUserID(c)).
 		POST("/role-mappings/realm", addRealmRoleToUser(c)).
 		DELETE("/role-mappings/realm", deleteRealmRoleFromUser(c)).
-		GET("/groups", getUserGroups(c))
+		GET("/groups", getUserGroups(c)).
+		PUT("/groups/:group_id", AddUserToGroup(c))
 
 	router.Group("/admin/realms/:realm/roles").
 		GET("", getRealmRoles(c)).
