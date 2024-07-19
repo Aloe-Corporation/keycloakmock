@@ -53,7 +53,7 @@ func getGroupMembers(conf Config) gin.HandlerFunc {
 			},
 		}
 
-		c.JSON(http.StatusOK, users)
+		c.JSON(http.StatusOK, &users)
 	}
 }
 
