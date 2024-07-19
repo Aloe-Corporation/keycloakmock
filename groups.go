@@ -45,7 +45,7 @@ func getGroupMembers(conf Config) gin.HandlerFunc {
 
 		users := []*User{
 			{
-				ID:        &id,
+				ID:        stringP(conf.UserUUID.String()),
 				Enabled:   stringB(true),
 				FirstName: stringP("dummy firstname"),
 				LastName:  stringP("dummy lasttname"),
