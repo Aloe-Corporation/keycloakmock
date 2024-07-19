@@ -12,6 +12,7 @@ func getGroups(conf Config) gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, "")
 			return
 		}
+
 		searchGroupName, ok := c.GetQuery("search")
 		if !ok {
 			c.JSON(http.StatusOK, flattenGroupConfig(conf.Groups))
@@ -19,8 +20,7 @@ func getGroups(conf Config) gin.HandlerFunc {
 		}
 
 		groups := findGroupsByName(conf.Groups, searchGroupName)
-
-		c.JSON(http.StatusNoContent, flattenGroupConfig(groups))
+		c.JSON(http.StatusOK, flattenGroupConfig(groups))
 	}
 }
 
