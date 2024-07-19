@@ -121,6 +121,17 @@ func addRealmRoleToUser(conf Config) gin.HandlerFunc {
 			return
 		}
 
+		id := c.Param("id")
+		if id == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		if id != conf.UserUUID.String() {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+
 		roles := []Role{}
 		if err := c.ShouldBindJSON(&roles); err != nil {
 			c.JSON(http.StatusBadRequest, "can't unmarshal role")
@@ -147,6 +158,17 @@ func deleteRealmRoleFromUser(conf Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.GetHeader("Authorization") == "" {
 			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		id := c.Param("id")
+		if id == "" {
+			c.JSON(http.StatusUnauthorized, "")
+			return
+		}
+
+		if id != conf.UserUUID.String() {
+			c.JSON(http.StatusBadRequest, "")
 			return
 		}
 
