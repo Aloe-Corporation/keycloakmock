@@ -14,9 +14,10 @@ func Lauch(c Config) *httptest.Server {
 
 func LauchDefault() (*httptest.Server, Config) {
 	c := Config{
-		Realm:    "test",
-		UserUUID: uuid.New(),
-		ClientId: "client",
+		Realm:          "test",
+		UserUUID:       uuid.New(),
+		ClientId:       "client",
+		OrganizationId: uuid.New(),
 		Roles: []RolesConfig{
 			{
 				Name: "default",
@@ -78,6 +79,9 @@ func launch(c Config) *httptest.Server {
 	router.Group("/admin/realms/:realm/groups").
 		GET("", getGroups(c)).
 		GET("/:id/members", getGroupMembers(c))
+
+	router.Group("/admin/realms/:realm/organizations").
+		GET("/:org_id/members", getOrganizationsMembers(c))
 
 	server := httptest.NewServer(router)
 	return server

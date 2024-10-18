@@ -3,11 +3,12 @@ package keycloakmock
 import "github.com/google/uuid"
 
 type Config struct {
-	Realm    string
-	UserUUID uuid.UUID
-	ClientId string
-	Roles    []RolesConfig
-	Groups   []GroupConfig
+	Realm          string
+	UserUUID       uuid.UUID
+	ClientId       string
+	Roles          []RolesConfig
+	Groups         []GroupConfig
+	OrganizationId uuid.UUID
 }
 
 type RolesConfig struct {
